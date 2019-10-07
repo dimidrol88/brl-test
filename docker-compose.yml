@@ -1,0 +1,51 @@
+version: '3'
+services:
+    nginx:
+        build:
+            context: ./docker/development
+            dockerfile: nginx.docker
+        volumes:
+             - ./:/app
+        depends_on:
+            - php-fpm
+        ports:
+            - "8080:80"
+    php-fpm:
+        build:
+            context: ./docker/development
+            dockerfile: php-fpm.docker
+        volumes:
+            - ./:/app
+        depends_on:
+            - pgsql
+    php-cli:
+        build:
+            context: ./docker/development
+            dockerfile: php-cli.docker
+        volumes:
+            - ./:/app
+            - composer:/root/.composer/cache
+        depends_on:
+            - pgsql
+    pgsql:
+        build:
+            context: ./docker/development
+            dockerfile: postgres.docker
+        volumes:
+            - postgres:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: brl
+        ports:
+            - "54321:5432"
+    redis:
+        build:
+            context: ./docker/development
+            dockerfile: redis.docker
+        volumes:
+            - redis:/data        
+volumes:
+    composer:
+    postgres:
+    redis:
