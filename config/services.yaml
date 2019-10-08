@@ -22,6 +22,21 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-
+        
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    
+    app.redisprovider:
+        class: Redis
+        calls:
+            -   method: connect
+                arguments:
+                    - '%env(REDIS_HOST)%'
+            -   method: auth
+                arguments:
+                    - '%env(REDIS_PASSWORD)%'
+            
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler:
+        arguments:
+          - '@app.redisprovider'
+      

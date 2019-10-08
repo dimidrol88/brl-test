@@ -44,7 +44,8 @@ services:
             context: ./docker/development
             dockerfile: redis.docker
         volumes:
-            - redis:/data        
+            - redis:/data 
+        command: redis-server --requirepass secret
 volumes:
     composer:
     postgres:
