@@ -46,6 +46,13 @@ services:
         volumes:
             - redis:/data 
         command: redis-server --requirepass secret
+    adminer:
+        image: adminer
+        ports:
+            - 8089:8080
+        depends_on:
+            - pgsql    
+    
 volumes:
     composer:
     postgres:
